@@ -8,3 +8,4 @@ venv/
 *.pyd
 .Python
 .DS_Store
+env
