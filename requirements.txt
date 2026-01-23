@@ -1,4 +1,40 @@
-flask
-torch
-transformers
-gunicorn
+# ===============================
+# Core API
+# ===============================
+fastapi>=0.95.0
+uvicorn>=0.21.1
+python-dotenv>=1.0.0
+pydantic>=1.10.7
+python-multipart>=0.0.6
+
+# ===============================
+# LLM Providers
+# ===============================
+groq>=0.3.0
+google-genai>=0.3.0
+
+# ===============================
+# Database
+# ===============================
+motor>=3.3.1
+pymongo>=4.3.3
+
+# ===============================
+# Semantic / Vector Memory
+# ===============================
+sentence-transformers>=2.2.2
+numpy
+scikit-learn
+
+# ===============================
+# Security / Auth
+# ===============================
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# ===============================
+# Utilities
+# ===============================
+httpx>=0.24.0
+pytz>=2023.3
+python-dateutil>=2.8.2

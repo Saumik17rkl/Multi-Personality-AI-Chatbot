@@ -1,0 +1,67 @@
+# Render Configuration for FastAPI Application
+# Reference: https://render.com/docs/deploy-fastapi
+
+services:
+  - type: web
+    name: mental-health-ai
+    env: python
+    region: singapore  # or choose a region closer to your users
+    buildCommand: |
+      pip install -r requirements.txt
+    startCommand: |
+      uvicorn app:app --host 0.0.0.0 --port $PORT --workers 4
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10  # or your preferred Python version
+      - key: PORT
+        value: 10000
+      - key: DEBUG
+        value: "False"
+      - key: GROQ_API_KEY
+        fromService:
+          type: secret
+          name: groq-api-key
+      - key: GEMINI_API_KEY
+        fromService:
+          type: secret
+          name: gemini-api-key
+      - key: MONGO_URI
+        fromService:
+          type: secret
+          name: mongo-uri
+      - key: MONGO_DB_NAME
+        value: Personality_Chatbot
+      - key: SECRET_KEY
+        generateValue: true
+    plan: free  # or 'starter', 'standard', 'plus' for production
+    autoDeploy: true  # auto-deploy on push to main branch
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "true"
+      - key: PYTHONPATH
+        value: "/opt/render/project/src"
+    buildCommand: |
+      pip install -r requirements.txt
+    # Uncomment and configure if you need a database
+    # database:
+    #   name: mongodb
+    #   plan: free  # or paid plan for production
+
+# Uncomment and configure if you need a background worker
+# workers:
+#   - type: worker
+#     name: background-worker
+#     env: python
+#     region: singapore
+#     buildCommand: |
+#       pip install -r requirements.txt
+#     startCommand: |
+#       python worker.py
+#     envVars:
+#       - key: PYTHON_VERSION
+#         value: 3.10
+#       - key: REDIS_URL
+#         fromService:
+#           type: redis
+#           name: my-redis
