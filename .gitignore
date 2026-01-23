@@ -8,4 +8,5 @@ venv/
 *.pyd
 .Python
 .DS_Store
-env
+*.sqlite3
+*.log
