@@ -1,66 +1,10 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Environment variables
 .env
 *.env
-
-# Virtual Environment
+__pycache__/
 venv/
-ENV/
-
-# IDE
 .idea/
-.vscode/
-*.swp
-*.swo
-*~
-
-# Logs
-*.log
-
-# Local development
+*.pyc
+*.pyo
+*.pyd
+.Python
 .DS_Store
-Thumbs.db
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Local development
-*.sqlite3
-db.sqlite3
-
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
-.mypy_cache/
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
