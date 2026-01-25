@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Kindred | Our Mission & Safety</title>
+    <style>
+        :root {
+            --bg-start: #fdfcff;
+            --bg-end: #f3f7ff;
+            --red: #ff4d6d;
+            --pink: #ff85b3;
+            --blue: #4d7cff;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Background Blobs */
+        .blob-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            filter: blur(80px);
+            opacity: 0.3;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: move 20s infinite alternate ease-in-out;
+        }
+
+        .blob-1 { width: 400px; height: 400px; background: var(--pink); top: -100px; right: -100px; }
+        .blob-2 { width: 350px; height: 350px; background: var(--blue); bottom: -50px; left: -50px; animation-delay: -5s; }
+        .blob-3 { width: 250px; height: 250px; background: var(--red); top: 40%; left: 20%; animation-delay: -10s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(50px, 100px) scale(1.2); }
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .back-link:hover { color: var(--blue); }
+
+        /* Main Content */
+        main {
+            padding: 2rem 5% 5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--blue), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        /* Sections & Cards */
+        .section-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            padding: 2.5rem;
+            border-radius: 32px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: var(--shadow);
+        }
+
+        .icon-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blue-bg { background: rgba(77, 124, 255, 0.1); color: var(--blue); }
+        .pink-bg { background: rgba(255, 133, 179, 0.1); color: var(--pink); }
+        .red-bg { background: rgba(255, 77, 109, 0.1); color: var(--red); }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        li {
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        li::before {
+            content: "•";
+            color: var(--blue);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Disclaimer Card */
+        .disclaimer-card {
+            background: rgba(255, 77, 109, 0.05);
+            border: 1px dashed var(--red);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .disclaimer-card h3 {
+            color: var(--red);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .disclaimer-card p {
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        /* Soft Separator */
+        .separator {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.05), transparent);
+            margin: 3rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        svg.icon {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2rem; }
+            .section-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">Kindred</a>
+        <a href="index.html" class="back-link">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+                <path d="M19 12H5M5 12L12 19M5 12L12 5"></path>
+            </svg>
+            Back to Home
+        </a>
+    </nav>
+
+    <main>
+        <header>
+            <h1>About Kindred</h1>
+            <p class="subtitle">Understanding the mission and the care behind the technology.</p>
+        </header>
+
+        <!-- Section 1: What is Kindred -->
+        <div class="section-card">
+            <div class="icon-header">
+                <div class="icon-circle pink-bg">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                </div>
+                <h2>What is Kindred?</h2>
+            </div>
+            <p>Kindred is a next-generation AI companion platform designed to bridge the gap between technology and emotional intelligence. We believe that everyone deserves a non-judgmental space to express themselves, especially in a world that often feels disconnected.</p>
+            <ul>
+                <li><strong>Emotionally Supportive:</strong> Our core logic is built around empathy and active listening.</li>
+                <li><strong>Dynamic Personas:</strong> Whether you need a casual friend to vent to, a supportive partner, or a structured session with a psychiatrist persona, Kindred adapts to your mood.</li>
+                <li><strong>Safe Exploration:</strong> We use strict ethical boundaries to ensure all conversations remain helpful and constructive.</li>
+            </ul>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Section 2: Mental-Health Safety First -->
+        <div class="section-card">
+            <div class="icon-header">
+                <div class="icon-circle blue-bg">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <path d="M12 8v4"></path>
+                        <path d="M12 16h.01"></path>
+                    </svg>
+                </div>
+                <h2>Mental-Health Safety First</h2>
+            </div>
+            <p>Safety is not an afterthought at Kindred—it is our foundation. We have built-in guardrails specifically designed for the nuances of mental health support.</p>
+            <ul>
+                <li><strong>Crisis Detection:</strong> Our system continuously monitors for signs of acute distress or self-harm.</li>
+                <li><strong>Intelligent Escalation:</strong> If a crisis is detected, the AI is programmed to automatically transition to a "Psychiatrist" mode, providing clinical guidance and resource redirection.</li>
+                <li><strong>Persona Boundaries:</strong> To maintain safety, romantic or casual personas are immediately disabled if the system detects high emotional vulnerability or distress.</li>
+                <li><strong>Indian Context:</strong> We understand the cultural nuances of mental health in India, providing relevant localized resources and sensitive communication styles.</li>
+            </ul>
+        </div>
+
+        <!-- Section 3: Disclaimer -->
+        <div class="disclaimer-card">
+            <div class="icon-header" style="justify-content: center; margin-bottom: 0.5rem;">
+                <svg class="icon" viewBox="0 0 24 24" style="color: var(--red);">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <h3>Important Disclaimer</h3>
+            <p>"This platform is not a replacement for professional medical or psychiatric care."</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Kindred AI. Dedicated to a healthier mind.</p>
+    </footer>
+
+</body>
+</html>

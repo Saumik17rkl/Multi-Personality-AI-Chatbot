@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindred - Chat</title>
+    <style>
+        :root {
+            --bg-start: #fdfcff;
+            --bg-end: #f3f7ff;
+            --red: #ff4d6d;
+            --pink: #ff85b3;
+            --blue: #4d7cff;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+            --ai-bubble: #f1f3f9;
+            --user-bubble: #4d7cff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-end);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- Error Overlay --- */
+        #error-overlay {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* --- Header --- */
+        header {
+            background: var(--white);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            z-index: 10;
+        }
+
+        .header-info h2 {
+            font-size: 18px;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .personality-tag {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: #f0f2f5;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-top: 2px;
+            display: inline-block;
+        }
+
+        /* --- Chat Area --- */
+        #chat-window {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png'); /* Subtle texture */
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.5;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.ai {
+            align-self: flex-start;
+            background: var(--ai-bubble);
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--user-bubble);
+            color: white;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 10px rgba(77, 124, 255, 0.2);
+        }
+
+        .system-message {
+            align-self: center;
+            background: #fff5f5;
+            color: var(--red);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            border: 1px solid #ffe3e3;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        /* --- Typing Indicator --- */
+        #typing-indicator {
+            align-self: flex-start;
+            background: var(--ai-bubble);
+            padding: 12px 16px;
+            border-radius: 18px;
+            display: none;
+            gap: 4px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* --- Input Area --- */
+        .input-area {
+            background: var(--white);
+            padding: 16px 24px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            border-top: 1px solid #eee;
+        }
+
+        #message-input {
+            flex: 1;
+            border: 1px solid #e5e7eb;
+            padding: 12px 20px;
+            border-radius: 100px;
+            outline: none;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        #message-input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(77, 124, 255, 0.1);
+        }
+
+        #send-btn {
+            background: linear-gradient(to right, var(--pink), var(--blue));
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        #send-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        #send-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="error-overlay">
+        <h1 style="color: var(--red); margin-bottom: 10px;">⚠️ Access Denied</h1>
+        <p id="error-text">Session not initialized. Please restart the conversation.</p>
+    </div>
+
+    <header>
+        <div class="header-info">
+            <h2>Kindred</h2>
+            <span id="personality-display" class="personality-tag">...</span>
+        </div>
+    </header>
+
+    <main id="chat-window">
+        <!-- Messages appear here -->
+        <div id="typing-indicator">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </main>
+
+    <div id="error-toast" class="error-toast">Message could not be sent. Please try again.</div>
+
+    <form class="input-area" id="chat-form">
+        <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off">
+        <button type="submit" id="send-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+    </form>
+
+    <script>
+        const API_BASE_URL = "https://multi-personality-ai-chatbot.onrender.com";
+        
+        // UI Elements
+        const chatWindow = document.getElementById('chat-window');
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const errorOverlay = document.getElementById('error-overlay');
+        const personalityDisplay = document.getElementById('personality-display');
+        const errorToast = document.getElementById('error-toast');
+
+        // Session Data
+        let sessionData = {
+            user_id: sessionStorage.getItem('session_id') || 'guest-' + Math.random().toString(36).substr(2, 9),
+            session_id: sessionStorage.getItem('session_id'),
+            gender: sessionStorage.getItem('kindred_gender'),
+            personality: sessionStorage.getItem('selected_personality')
+        };
+        
+        // Store user_id if not exists
+        if (!sessionStorage.getItem('user_id')) {
+            sessionStorage.setItem('user_id', sessionData.user_id);
+        }
+
+        function validateSession() {
+            const isValid = sessionData.session_id && 
+                          sessionData.gender && 
+                          sessionData.personality;
+
+            if (!isValid) {
+                // Show specific error message
+                const errorText = document.getElementById('error-text');
+                if (!sessionData.gender) {
+                    errorText.textContent = 'Gender not selected. Please start from the beginning.';
+                } else if (!sessionData.personality) {
+                    errorText.textContent = 'Personality not selected. Please choose a personality first.';
+                } else {
+                    errorText.textContent = 'Session not properly initialized. Please try again.';
+                }
+                errorOverlay.style.display = 'flex';
+                return false;
+            }
+
+            // Format and display the personality name
+            const formattedPersonality = sessionData.personality
+                .split('_')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+                
+            personalityDisplay.textContent = formattedPersonality;
+            document.title = `Kindred - ${formattedPersonality}`;
+            
+            return true;
+        }
+
+        function appendMessage(text, role, isSystem = false) {
+            const msgDiv = document.createElement('div');
+            
+            if (isSystem) {
+                msgDiv.className = 'system-message';
+            } else {
+                msgDiv.className = `message ${role}`;
+            }
+            
+            msgDiv.textContent = text;
+            
+            // Insert before typing indicator
+            chatWindow.insertBefore(msgDiv, typingIndicator);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function showToast() {
+            errorToast.style.display = 'block';
+            setTimeout(() => {
+                errorToast.style.display = 'none';
+            }, 3000);
+        }
+
+        async function sendMessage(text) {
+            // UI state
+            const messageText = text.trim();
+            if (!messageText) return;
+            
+            messageInput.value = '';
+            messageInput.disabled = true;
+            sendBtn.disabled = true;
+            typingIndicator.style.display = 'flex';
+            scrollToBottom();
+
+            appendMessage(messageText, 'user');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/chat/${sessionData.personality}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: sessionData.user_id,
+                        session_id: sessionData.session_id,
+                        gender: sessionData.gender,
+                        personality: sessionData.personality,
+                        message: messageText,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || 'Failed to get response from server');
+                }
+
+                const data = await response.json();
+
+                // Update session ID if changed
+                if (data.session_id && data.session_id !== sessionData.session_id) {
+                    sessionData.session_id = data.session_id;
+                    sessionStorage.setItem('session_id', data.session_id);
+                }
+
+                // Check for safety/system events in text or metadata
+                const isSafetyIssue = data.reply && (
+                    data.reply.toLowerCase().includes("safety escalation") || 
+                    data.reply.toLowerCase().includes("system notice") ||
+                    (data.metadata && data.metadata.is_sensitive)
+                );
+
+                appendMessage(data.reply || 'Sorry, I encountered an error processing your request.', 
+                            'ai', 
+                            isSafetyIssue);
+
+            } catch (error) {
+                console.error("Chat Error:", error);
+                appendMessage("I'm having trouble connecting to the server. Please try again in a moment.", 'ai', true);
+            } finally {
+                typingIndicator.style.display = 'none';
+                messageInput.disabled = false;
+                sendBtn.disabled = false;
+                messageInput.focus();
+                scrollToBottom();
+            }
+        }
+
+        // Initialization
+        if (validateSession()) {
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const text = messageInput.value.trim();
+                if (text && !messageInput.disabled) {
+                    sendMessage(text);
+                }
+            });
+
+            // Initial greeting based on personality and gender
+            const greetings = {
+                male: {
+                    default: "How can I assist you today?",
+                    funny: "Ready to share some laughs? What's on your mind?",
+                    professional: "How may I be of service today?",
+                    friendly: "Hey there! What would you like to chat about?",
+                    supportive: "I'm here to listen and support you. What's on your mind?"
+                },
+                female: {
+                    default: "How may I help you today?",
+                    funny: "Ready for some fun conversation? What's up?",
+                    professional: "How can I assist you with your needs today?",
+                    friendly: "Hi there! What would you like to talk about?",
+                    supportive: "I'm here for you. What would you like to share?"
+                }
+            };
+            
+            const personality = sessionData.personality.toLowerCase();
+            const gender = sessionData.gender || 'female';
+            let greeting = greetings[gender]?.[personality] || greetings[gender]?.default || "Hello! How can I help you today?";
+            
+            appendMessage(greeting, 'ai');
+        }
+    </script>
+</body>
+</html>
