@@ -1,0 +1,211 @@
+ABOUT PAGE — SCOPED STYLES
+.about-wrapper {
+    background: linear-gradient(135deg, #fdfcff, #f3f7ff);
+    color: #2d3436;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* Root Variables */
+.about-wrapper :root {
+    --bg-start: #fdfcff;
+    --bg-end: #f3f7ff;
+    --red: #ff4d6d;
+    --pink: #ff85b3;
+    --blue: #4d7cff;
+    --text-dark: #2d3436;
+    --text-muted: #636e72;
+    --white: #ffffff;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --transition: all 0.3s ease;
+}
+
+/* Background Blobs */
+.about-wrapper .blob-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    filter: blur(80px);
+    opacity: 0.3;
+}
+
+.about-wrapper .blob {
+    position: absolute;
+    border-radius: 50%;
+    animation: move 20s infinite alternate ease-in-out;
+}
+
+.about-wrapper .blob-1 { width: 400px; height: 400px; background: var(--pink); top: -100px; right: -100px; }
+.about-wrapper .blob-2 { width: 350px; height: 350px; background: var(--blue); bottom: -50px; left: -50px; animation-delay: -5s; }
+.about-wrapper .blob-3 { width: 250px; height: 250px; background: var(--red); top: 40%; left: 20%; animation-delay: -10s; }
+
+@keyframes move {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(50px, 100px) scale(1.2); }
+}
+
+/* NAVIGATION */
+.about-wrapper nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-wrapper .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--blue);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.about-wrapper .back-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: var(--transition);
+}
+
+.about-wrapper .back-link:hover { color: var(--blue); }
+
+/* MAIN CONTENT */
+.about-wrapper main {
+    padding: 2rem 5% 5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-wrapper header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.about-wrapper h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, var(--blue), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.about-wrapper .subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+/* SECTION CARDS */
+.about-wrapper .section-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    padding: 2.5rem;
+    border-radius: 32px;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: var(--shadow);
+}
+
+.about-wrapper .icon-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.about-wrapper .icon-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-wrapper .blue-bg { background: rgba(77,124,255,0.1); color: var(--blue); }
+.about-wrapper .pink-bg { background: rgba(255,133,179,0.1); color: var(--pink); }
+.about-wrapper .red-bg { background: rgba(255,77,109,0.1); color: var(--red); }
+
+.about-wrapper h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.about-wrapper p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+}
+
+.about-wrapper ul {
+    list-style: none;
+    margin-top: 1rem;
+}
+
+.about-wrapper li {
+    color: var(--text-muted);
+    margin-bottom: 0.8rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.about-wrapper li::before {
+    content: "•";
+    color: var(--blue);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* DISCLAIMER */
+.about-wrapper .disclaimer-card {
+    background: rgba(255,77,109,0.05);
+    border: 1px dashed var(--red);
+    border-radius: 24px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.about-wrapper .disclaimer-card h3 {
+    color: var(--red);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.about-wrapper .disclaimer-card p {
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+/* FOOTER */
+.about-wrapper footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.about-wrapper svg.icon {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+}   

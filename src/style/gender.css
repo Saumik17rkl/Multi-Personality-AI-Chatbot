@@ -1,0 +1,235 @@
+:root {
+  --bg-start: #fdfcff;
+  --bg-end: #f3f7ff;
+  --red: #ff4d6d;
+  --pink: #ff85b3;
+  --blue: #4d7cff;
+  --text-dark: #2d3436;
+  --text-muted: #636e72;
+  --white: #ffffff;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/**********************
+  GENDER PAGE (SCOPED)
+**********************/
+.gender-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+  color: var(--text-dark);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Background Blobs */
+.gender-wrapper .blob-container {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  filter: blur(80px);
+  opacity: 0.35;
+}
+
+.gender-wrapper .blob {
+  position: absolute;
+  border-radius: 50%;
+  animation: move 20s infinite alternate ease-in-out;
+}
+
+.gender-wrapper .blob-1 {
+  width: 400px;
+  height: 400px;
+  background: var(--pink);
+  top: -100px;
+  right: -100px;
+}
+
+.gender-wrapper .blob-2 {
+  width: 350px;
+  height: 350px;
+  background: var(--blue);
+  bottom: -50px;
+  left: -50px;
+  animation-delay: -5s;
+}
+
+.gender-wrapper .blob-3 {
+  width: 250px;
+  height: 250px;
+  background: var(--red);
+  top: 40%;
+  left: 20%;
+  animation-delay: -10s;
+}
+
+@keyframes move {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(50px, 100px) scale(1.2); }
+}
+
+/* Navbar */
+.gender-wrapper nav {
+  padding: 1.5rem 5%;
+  display: flex;
+  justify-content: center;
+}
+
+.gender-wrapper .logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--blue);
+}
+
+/* Main Card */
+.gender-wrapper main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.gender-wrapper .selection-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 3rem 2rem;
+  border-radius: 40px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.gender-wrapper .selection-card header {
+  margin-bottom: 2.5rem;
+}
+
+.gender-wrapper .selection-card h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.gender-wrapper .subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* Gender Options */
+.gender-wrapper .options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.gender-wrapper .option-card {
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid transparent;
+  padding: 2rem 1rem;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gender-wrapper .option-card:hover {
+  transform: translateY(-5px);
+  background: white;
+}
+
+.gender-wrapper .option-card.selected.male {
+  border-color: var(--blue);
+  background: rgba(77, 124, 255, 0.05);
+}
+
+.gender-wrapper .option-card.selected.female {
+  border-color: var(--pink);
+  background: rgba(255, 133, 179, 0.05);
+}
+
+/* Icons */
+.gender-wrapper .icon-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gender-wrapper .male .icon-circle {
+  background: rgba(77, 124, 255, 0.1);
+  color: var(--blue);
+}
+
+.gender-wrapper .female .icon-circle {
+  background: rgba(255, 133, 179, 0.1);
+  color: var(--pink);
+}
+
+.gender-wrapper .selected.male .icon-circle {
+  background: var(--blue);
+  color: white;
+}
+
+.gender-wrapper .selected.female .icon-circle {
+  background: var(--pink);
+  color: white;
+}
+
+.gender-wrapper .option-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Continue Button */
+.gender-wrapper .cta-btn {
+  width: 100%;
+  padding: 1.1rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--pink), var(--blue));
+  color: white;
+  opacity: 0.5;
+  transition: var(--transition);
+  position: relative;
+}
+
+.gender-wrapper .cta-btn.enabled {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.gender-wrapper .cta-btn.loading {
+  color: transparent;
+}
+
+.gender-wrapper .cta-btn.loading::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -10px;
+  margin-left: -10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+} 
