@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identify | Kindred</title>
+    <style>
+        :root {
+            --bg-start: #fdfcff;
+            --bg-end: #f3f7ff;
+            --red: #ff4d6d;
+            --pink: #ff85b3;
+            --blue: #4d7cff;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Background Blobs */
+        .blob-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(80px);
+            opacity: 0.35;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: move 20s infinite alternate ease-in-out;
+        }
+
+        .blob-1 { width: 400px; height: 400px; background: var(--pink); top: -100px; right: -100px; }
+        .blob-2 { width: 350px; height: 350px; background: var(--blue); bottom: -50px; left: -50px; animation-delay: -5s; }
+        .blob-3 { width: 250px; height: 250px; background: var(--red); top: 40%; left: 20%; animation-delay: -10s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(50px, 100px) scale(1.2); }
+        }
+
+        nav {
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .selection-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 3rem 2rem;
+            border-radius: 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 2.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid transparent;
+            padding: 2rem 1rem;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            background: var(--white);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+        }
+
+        .option-card.selected.male {
+            border-color: var(--blue);
+            background: rgba(77, 124, 255, 0.05);
+        }
+
+        .option-card.selected.female {
+            border-color: var(--pink);
+            background: rgba(255, 133, 179, 0.05);
+        }
+
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .male .icon-circle { background: rgba(77, 124, 255, 0.1); color: var(--blue); }
+        .female .icon-circle { background: rgba(255, 133, 179, 0.1); color: var(--pink); }
+
+        .selected.male .icon-circle { background: var(--blue); color: white; }
+        .selected.female .icon-circle { background: var(--pink); color: white; }
+
+        .option-label {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+        }
+
+        .cta-btn {
+            width: 100%;
+            padding: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(90deg, var(--pink), var(--blue));
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0.5;
+            pointer-events: none;
+            box-shadow: 0 8px 20px rgba(77, 124, 255, 0.15);
+            position: relative;
+        }
+
+        .cta-btn.enabled {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .cta-btn.loading {
+            color: transparent;
+            pointer-events: none;
+        }
+
+        .cta-btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        svg.icon {
+            width: 32px;
+            height: 32px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @media (max-width: 480px) {
+            .selection-card { padding: 2rem 1.5rem; }
+            .options { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav>
+        <div class="logo">Kindred</div>
+    </nav>
+
+    <main>
+        <div class="selection-card">
+            <header>
+                <h1>Tell us how you identify</h1>
+                <p class="subtitle">This helps us show you the right conversation options.</p>
+            </header>
+
+            <div class="options">
+                <div class="option-card male" onclick="selectGender('male', this)">
+                    <div class="icon-circle">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <circle cx="10" cy="14" r="5"></circle>
+                            <path d="M19 5L13.5 10.5M19 5H14M19 5V10"></path>
+                        </svg>
+                    </div>
+                    <span class="option-label">Male</span>
+                </div>
+
+                <div class="option-card female" onclick="selectGender('female', this)">
+                    <div class="icon-circle">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="9" r="5"></circle>
+                            <path d="M12 14V21M9 18H15"></path>
+                        </svg>
+                    </div>
+                    <span class="option-label">Female</span>
+                </div>
+            </div>
+
+            <button id="continueBtn" class="cta-btn" onclick="handleContinue()">Continue</button>
+        </div>
+    </main>
+
+    <script>
+        let selectedGender = null;
+
+        /**
+         * Generic fetch helper with exponential backoff retry logic.
+         */
+        async function fetchWithRetry(url, options = {}, retries = 5, backoff = 1000) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response;
+            } catch (error) {
+                if (retries > 0) {
+                    await new Promise(resolve => setTimeout(resolve, backoff));
+                    return fetchWithRetry(url, options, retries - 1, backoff * 2);
+                }
+                throw error;
+            }
+        }
+
+        function selectGender(gender, element) {
+            // Remove selection from all cards
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // Add selection to clicked card
+            element.classList.add('selected');
+            selectedGender = gender;
+
+            // Enable button
+            const btn = document.getElementById('continueBtn');
+            btn.classList.add('enabled');
+            btn.innerText = "Continue"; // Reset text if it was error state
+        }
+
+        async function handleContinue() {
+            if (!selectedGender) return;
+
+            const btn = document.getElementById('continueBtn');
+            btn.classList.add('loading');
+
+            try {
+                // API Call to get personalities based on gender
+                const apiUrl = `https://multi-personality-ai-chatbot.onrender.com/personalities?gender=${selectedGender}`;
+                const response = await fetchWithRetry(apiUrl);
+                const data = await response.json();
+                
+                console.log("Backend Information Received:", data);
+
+                // Store data in sessionStorage to pass it to the next page
+                sessionStorage.setItem('kindred_gender', selectedGender);
+                sessionStorage.setItem('kindred_personalities', JSON.stringify(data));
+
+                // Navigate to the next page
+                window.location.href = "personality-selection.html";
+            } catch (error) {
+                console.error("Failed to fetch personalities:", error);
+                btn.classList.remove('loading');
+                btn.innerText = "Try Again";
+                // In a real app, you'd show a custom toast/modal here instead of an alert
+            }
+        }
+    </script>
+
+</body>
+</html>
