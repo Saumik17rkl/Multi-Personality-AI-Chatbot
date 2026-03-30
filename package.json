@@ -1,0 +1,13 @@
+{
+  "name": "kindred-chat",
+  "version": "1.0.0",
+  "description": "A multi-personality AI chat application",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["chat", "ai", "personality", "vercel"],
+  "author": "",
+  "license": "MIT"
+}
